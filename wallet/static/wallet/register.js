@@ -64,7 +64,7 @@ form.addEventListener("submit", async (event) => {
 
     try {
         await loginAfterRegister(payload.username, payload.password);
-        window.location.href = "/profile/";
+        window.location.href = "/dashboard/";
     } catch (error) {
         showToast(error.message, true);
     }

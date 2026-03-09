@@ -24,7 +24,7 @@ async function tryExistingSession() {
     });
 
     if (res.ok) {
-        window.location.href = "/profile/";
+        window.location.href = "/dashboard/";
     }
 }
 
@@ -56,7 +56,7 @@ form.addEventListener("submit", async (event) => {
     }
 
     setAuth(payload.access, payload.refresh);
-    window.location.href = "/profile/";
+    window.location.href = "/dashboard/";
 });
 
 tryExistingSession().catch(() => {});

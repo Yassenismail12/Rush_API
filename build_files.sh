@@ -1,20 +1,18 @@
-#!/usr/bin/env bash
+#!/bin/bash
 set -euo pipefail
 
-PYTHON_BIN="${PYTHON_BIN:-python3}"
-
-echo "[build] Checking for pending model changes..."
-if ! "$PYTHON_BIN" manage.py makemigrations --check --dry-run >/dev/null 2>&1; then
-  echo "[build] Creating migrations..."
-  "$PYTHON_BIN" manage.py makemigrations --noinput
-else
-  echo "[build] No new migrations needed."
+if [ -f ".env" ]; then
+  echo "[build] Loading .env variables..."
+  set -a
+  source .env
+  set +a
 fi
 
-echo "[build] Applying migrations..."
-"$PYTHON_BIN" manage.py migrate --noinput
+echo "[build] Running migrations..."
+python3 manage.py makemigrations --noinput
+python3 manage.py migrate --noinput
 
 echo "[build] Collecting static files..."
-"$PYTHON_BIN" manage.py collectstatic --noinput
+python3 manage.py collectstatic --noinput
 
-echo "[build] Done."
+echo "[build] Complete."

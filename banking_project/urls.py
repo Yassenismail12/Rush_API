@@ -16,6 +16,7 @@ urlpatterns = [
     path("", RedirectView.as_view(url="/login/", permanent=False), name="frontend-home"),
     path("login/", LoginPageView.as_view(), name="frontend-login"),
     path("register/", RegisterPageView.as_view(), name="frontend-register"),
+    path("dashboard/", ProfilePageView.as_view(), name="frontend-dashboard"),
     path("profile/", ProfilePageView.as_view(), name="frontend-profile"),
     path("admin/", admin.site.urls),
     path("api/wallet/", include("wallet.urls")),

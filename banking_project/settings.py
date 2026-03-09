@@ -14,9 +14,7 @@ from pathlib import Path
 import os
 from datetime import timedelta
 from dotenv import load_dotenv
-import os
 import dj_database_url
-from pathlib import Path
 
 load_dotenv()
 
@@ -90,53 +88,27 @@ WSGI_APPLICATION = "banking_project.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 #
-# Local default: SQLite for zero-setup runs.
-# PostgreSQL is enabled when DB_ENGINE=postgres, or when DB_HOST/DB_NAME are provided.
-DB_ENGINE = os.getenv("DB_ENGINE", "").lower()
-USE_POSTGRES = DB_ENGINE == "postgres" or (
-    DB_ENGINE == "" and os.getenv("DB_HOST") and os.getenv("DB_NAME")
-)
-# Database configuration - use PostgreSQL on Vercel
-if os.environ.get('VERCEL'):
-    # Production on Vercel - use Postgres
+# Priority:
+# 1) DATABASE_URL (from .env or Vercel env)
+# 2) POSTGRES_URL (Vercel Postgres)
+# 3) Local SQLite fallback
+DATABASE_URL = os.getenv("DATABASE_URL") or os.getenv("POSTGRES_URL")
+
+if DATABASE_URL:
     DATABASES = {
-        'default': dj_database_url.config(
-            default=os.environ.get('POSTGRES_URL'),
+        "default": dj_database_url.parse(
+            DATABASE_URL,
             conn_max_age=600,
-            ssl_require=True
+            ssl_require=True,
         )
     }
 else:
-    # Local development - keep SQLite for simplicity
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
         }
     }
-
-# Add these for better performance on Vercel
-DATABASES['default']['OPTIONS'] = {
-    'sslmode': 'require',
-}
-# if USE_POSTGRES:
-#     DATABASES = {
-#         "default": {
-#             "ENGINE": "django.db.backends.postgresql",
-#             "NAME": os.getenv("DB_NAME", "Rush"),
-#             "USER": os.getenv("DB_USER", "postgres"),
-#             "PASSWORD": os.getenv("DB_PASSWORD", ""),
-#             "HOST": os.getenv("DB_HOST", "localhost"),
-#             "PORT": os.getenv("DB_PORT", "5432"),
-#         }
-#     }
-# else:
-#     DATABASES = {
-#         "default": {
-#             "ENGINE": "django.db.backends.sqlite3",
-#             "NAME": BASE_DIR / "db.sqlite3",
-#         }
-#     }
 
 
 # Password validation
