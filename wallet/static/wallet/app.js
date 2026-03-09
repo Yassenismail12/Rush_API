@@ -127,6 +127,12 @@ function txBadge(status) {
     return "PENDING";
 }
 
+function txBadgeClass(status) {
+    if (status === "SUCCESS") return "status-pill success";
+    if (status === "FAILED") return "status-pill failed";
+    return "status-pill pending";
+}
+
 function txDate(input) {
     const value = new Date(input);
     return value.toLocaleString();
@@ -165,7 +171,7 @@ function renderHistory(rows) {
                 <td>${escapeHtml(row.sender || "-")}</td>
                 <td>${escapeHtml(row.receiver || "-")}</td>
                 <td>${formatMoney(row.amount)}</td>
-                <td>${escapeHtml(txBadge(row.status))}</td>
+                <td><span class="${escapeHtml(txBadgeClass(row.status))}">${escapeHtml(txBadge(row.status))}</span></td>
                 <td>${escapeHtml(txDate(row.timestamp))}</td>
             </tr>
         `
