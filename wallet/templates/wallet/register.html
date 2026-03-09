@@ -25,7 +25,13 @@
                     </div>
                 </div>
 
-                <form id="register-form" class="row g-3" autocomplete="on">
+                <form
+                    id="register-form"
+                    class="row g-3"
+                    autocomplete="on"
+                    method="post"
+                    action="/api/wallet/register/"
+                >
                     <div class="col-12 col-md-6">
                         <label class="form-label">Username</label>
                         <input name="username" type="text" class="form-control wallet-input" required>
