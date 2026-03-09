@@ -33,7 +33,10 @@ SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-default-key-for-dev")
 DEBUG = os.getenv("DEBUG", "True") == "True"
 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+        'rush-api-liart.vercel.app',
+        'vercel.app',
+]
 
 
 # Application definition
