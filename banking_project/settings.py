@@ -35,6 +35,7 @@ DEBUG = os.getenv("DEBUG", "True") == "True"
 
 ALLOWED_HOSTS = [
         'rush-api-liart.vercel.app',
+        'rush-api-aowl.vercel.app',
         'vercel.app',
 ]
 
