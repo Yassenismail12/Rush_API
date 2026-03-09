@@ -2,6 +2,12 @@ from rest_framework import serializers
 from .models import Wallet, Transaction, CustomUser
 
 
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ["username", "email", "first_name", "last_name"]
+
+
 class WalletSerializer(serializers.ModelSerializer):
     class Meta:
         model = Wallet

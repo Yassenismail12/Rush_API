@@ -7,6 +7,7 @@ from django.core.exceptions import ValidationError
 from django.views.generic import TemplateView
 from .models import Wallet, Transaction
 from .serializers import (
+    UserProfileSerializer,
     WalletSerializer,
     DepositSerializer,
     TransferSerializer,
@@ -16,8 +17,16 @@ from .serializers import (
 from .services import deposit_funds, transfer_funds
 
 
-class FrontendView(TemplateView):
-    template_name = "wallet/index.html"
+class LoginPageView(TemplateView):
+    template_name = "wallet/login.html"
+
+
+class RegisterPageView(TemplateView):
+    template_name = "wallet/register.html"
+
+
+class ProfilePageView(TemplateView):
+    template_name = "wallet/profile.html"
 
 
 class UserRegistrationView(APIView):
@@ -43,6 +52,21 @@ class WalletBalanceView(APIView):
         wallet, _ = Wallet.objects.get_or_create(user=request.user)
         serializer = WalletSerializer(wallet)
         return Response(serializer.data)
+
+
+class UserProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        wallet, _ = Wallet.objects.get_or_create(user=request.user)
+        user_serializer = UserProfileSerializer(request.user)
+        wallet_serializer = WalletSerializer(wallet)
+        return Response(
+            {
+                "user": user_serializer.data,
+                "wallet": wallet_serializer.data,
+            }
+        )
 
 
 class DepositView(APIView):

@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "buildCommand": "python3 manage.py migrate --noinput && python3 manage.py collectstatic --noinput",
   "builds": [
     {
       "src": "banking_project/wsgi.py",

@@ -4,15 +4,19 @@ URL configuration for banking_project project.
 
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic import RedirectView
 from drf_spectacular.views import (
     SpectacularAPIView,
     SpectacularRedocView,
     SpectacularSwaggerView,
 )
-from wallet.views import FrontendView
+from wallet.views import LoginPageView, RegisterPageView, ProfilePageView
 
 urlpatterns = [
-    path("", FrontendView.as_view(), name="frontend-home"),
+    path("", RedirectView.as_view(url="/login/", permanent=False), name="frontend-home"),
+    path("login/", LoginPageView.as_view(), name="frontend-login"),
+    path("register/", RegisterPageView.as_view(), name="frontend-register"),
+    path("profile/", ProfilePageView.as_view(), name="frontend-profile"),
     path("admin/", admin.site.urls),
     path("api/wallet/", include("wallet.urls")),
     # API Schema and Documentation

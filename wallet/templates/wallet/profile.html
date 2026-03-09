@@ -1,0 +1,141 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rush Wallet | Profile</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'wallet/app.css' %}">
+</head>
+<body>
+    <div class="bg-shape bg-shape-a"></div>
+    <div class="bg-shape bg-shape-b"></div>
+
+    <header class="container py-4">
+        <nav class="wallet-nav glass-card d-flex align-items-center justify-content-between px-3 px-md-4 py-3">
+            <div>
+                <h1 class="brand-title m-0">Profile</h1>
+                <p id="profile-subtitle" class="brand-subtitle m-0">Wallet overview</p>
+            </div>
+            <button id="logout-btn" class="btn btn-outline-light btn-sm rounded-pill">Logout</button>
+        </nav>
+    </header>
+
+    <main class="container pb-5" id="dashboard">
+        <div class="row g-4">
+            <div class="col-12 reveal-up in">
+                <div class="glass-card p-4">
+                    <div class="row g-3">
+                        <div class="col-12 col-md-4">
+                            <p class="balance-label mb-1">Name</p>
+                            <h2 id="profile-name" class="m-0 h4"></h2>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <p class="balance-label mb-1">Username</p>
+                            <h3 id="profile-username" class="m-0 h5"></h3>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <p class="balance-label mb-1">Email</p>
+                            <h3 id="profile-email" class="m-0 h6"></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 reveal-up in">
+                <div class="balance-card glass-card p-4 p-md-5">
+                    <div class="d-flex flex-wrap justify-content-between align-items-end gap-3">
+                        <div>
+                            <p class="balance-label mb-2">Available Balance</p>
+                            <h2 id="balance-value" class="balance-value m-0">$0.00</h2>
+                        </div>
+                        <span class="chip-live">Live</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6 reveal-up in">
+                <div class="glass-card p-4 h-100">
+                    <h3 class="card-title mb-3">Deposit</h3>
+                    <form id="deposit-form" class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label">Amount</label>
+                            <input name="amount" type="number" min="0.01" step="0.01" class="form-control wallet-input" required>
+                        </div>
+                        <div class="col-12 d-grid">
+                            <button type="submit" class="btn btn-wallet">Deposit Funds</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6 reveal-up in">
+                <div class="glass-card p-4 h-100">
+                    <h3 class="card-title mb-3">Transfer</h3>
+                    <form id="transfer-form" class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label">Receiver Username</label>
+                            <input name="receiver_username" type="text" class="form-control wallet-input" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Amount</label>
+                            <input name="amount" type="number" min="0.01" step="0.01" class="form-control wallet-input" required>
+                        </div>
+                        <div class="col-12 d-grid">
+                            <button type="submit" class="btn btn-wallet">Send Transfer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-12 reveal-up in">
+                <div class="glass-card p-3 p-md-4">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                        <h3 class="card-title m-0">Transaction History</h3>
+                        <div class="d-flex gap-2 align-items-center">
+                            <select id="status-filter" class="form-select wallet-input wallet-select">
+                                <option value="">All Statuses</option>
+                                <option value="SUCCESS">Success</option>
+                                <option value="PENDING">Pending</option>
+                                <option value="FAILED">Failed</option>
+                            </select>
+                            <button id="refresh-history" type="button" class="btn btn-outline-light">Refresh</button>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive history-table-wrap">
+                        <table class="table align-middle mb-0 history-table">
+                            <thead>
+                                <tr>
+                                    <th>Reference</th>
+                                    <th>From</th>
+                                    <th>To</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id="history-body">
+                                <tr><td colspan="6" class="muted">No transactions yet.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="d-flex justify-content-end align-items-center gap-2 mt-3">
+                        <button id="prev-page" class="btn btn-outline-light btn-sm" type="button">Previous</button>
+                        <span id="page-info" class="text-soft">Page 1</span>
+                        <button id="next-page" class="btn btn-outline-light btn-sm" type="button">Next</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="toast" class="toast" aria-live="polite"></div>
+    <script src="{% static 'wallet/profile.js' %}"></script>
+</body>
+</html>
