@@ -9,8 +9,10 @@ from drf_spectacular.views import (
     SpectacularRedocView,
     SpectacularSwaggerView,
 )
+from wallet.views import FrontendView
 
 urlpatterns = [
+    path("", FrontendView.as_view(), name="frontend-home"),
     path("admin/", admin.site.urls),
     path("api/wallet/", include("wallet.urls")),
     # API Schema and Documentation

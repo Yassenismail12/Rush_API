@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import status
 from django.core.exceptions import ValidationError
+from django.views.generic import TemplateView
 from .models import Wallet, Transaction
 from .serializers import (
     WalletSerializer,
@@ -13,6 +14,10 @@ from .serializers import (
     UserRegistrationSerializer,
 )
 from .services import deposit_funds, transfer_funds
+
+
+class FrontendView(TemplateView):
+    template_name = "wallet/index.html"
 
 
 class UserRegistrationView(APIView):

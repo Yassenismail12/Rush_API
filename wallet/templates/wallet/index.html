@@ -1,0 +1,140 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rush Wallet Console</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Archivo+Black&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'wallet/app.css' %}">
+</head>
+<body>
+    <div class="orb orb-left"></div>
+    <div class="orb orb-right"></div>
+
+    <header class="topbar">
+        <h1>RUSH</h1>
+        <p>Wallet Operations Console</p>
+        <button id="logout-btn" class="ghost-btn" hidden>Logout</button>
+    </header>
+
+    <main class="layout">
+        <section id="auth-shell" class="panel auth-panel">
+            <div class="panel-head">
+                <h2>Access</h2>
+                <p>Register once, then sign in to operate your wallet.</p>
+            </div>
+
+            <div class="tab-switch" role="tablist" aria-label="Auth forms">
+                <button id="login-tab" class="tab-btn active" type="button">Login</button>
+                <button id="register-tab" class="tab-btn" type="button">Register</button>
+            </div>
+
+            <form id="login-form" class="form-grid" autocomplete="on">
+                <label>Username
+                    <input name="username" type="text" required>
+                </label>
+                <label>Password
+                    <input name="password" type="password" required>
+                </label>
+                <button type="submit" class="solid-btn">Sign In</button>
+            </form>
+
+            <form id="register-form" class="form-grid hidden" autocomplete="on">
+                <label>Username
+                    <input name="username" type="text" required>
+                </label>
+                <label>Email
+                    <input name="email" type="email" required>
+                </label>
+                <label>First Name
+                    <input name="first_name" type="text" required>
+                </label>
+                <label>Last Name
+                    <input name="last_name" type="text" required>
+                </label>
+                <label>Password
+                    <input name="password" type="password" minlength="8" required>
+                </label>
+                <button type="submit" class="solid-btn">Create Account</button>
+            </form>
+        </section>
+
+        <section id="dashboard" class="panel dashboard hidden">
+            <div class="balance-strip">
+                <h2>Current Balance</h2>
+                <p id="balance-value">$0.00</p>
+            </div>
+
+            <div class="cards">
+                <article class="feature-card">
+                    <h3>Deposit</h3>
+                    <form id="deposit-form" class="form-grid compact">
+                        <label>Amount
+                            <input name="amount" type="number" min="0.01" step="0.01" required>
+                        </label>
+                        <button type="submit" class="solid-btn">Deposit Funds</button>
+                    </form>
+                </article>
+
+                <article class="feature-card">
+                    <h3>Transfer</h3>
+                    <form id="transfer-form" class="form-grid compact">
+                        <label>Receiver Username
+                            <input name="receiver_username" type="text" required>
+                        </label>
+                        <label>Amount
+                            <input name="amount" type="number" min="0.01" step="0.01" required>
+                        </label>
+                        <button type="submit" class="solid-btn">Send Transfer</button>
+                    </form>
+                </article>
+            </div>
+
+            <article class="feature-card history">
+                <div class="history-head">
+                    <h3>Transaction History</h3>
+                    <div class="tools">
+                        <select id="status-filter">
+                            <option value="">All Statuses</option>
+                            <option value="SUCCESS">Success</option>
+                            <option value="PENDING">Pending</option>
+                            <option value="FAILED">Failed</option>
+                        </select>
+                        <button id="refresh-history" type="button" class="ghost-btn">Refresh</button>
+                    </div>
+                </div>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Reference</th>
+                                <th>From</th>
+                                <th>To</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-body">
+                            <tr><td colspan="6" class="muted">No transactions yet.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="pager">
+                    <button id="prev-page" class="ghost-btn" type="button">Previous</button>
+                    <span id="page-info">Page 1</span>
+                    <button id="next-page" class="ghost-btn" type="button">Next</button>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <div id="toast" class="toast" aria-live="polite"></div>
+    <script src="{% static 'wallet/app.js' %}"></script>
+</body>
+</html>
