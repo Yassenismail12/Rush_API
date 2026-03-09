@@ -14,6 +14,9 @@ from pathlib import Path
 import os
 from datetime import timedelta
 from dotenv import load_dotenv
+import os
+import dj_database_url
+from pathlib import Path
 
 load_dotenv()
 
@@ -93,25 +96,47 @@ DB_ENGINE = os.getenv("DB_ENGINE", "").lower()
 USE_POSTGRES = DB_ENGINE == "postgres" or (
     DB_ENGINE == "" and os.getenv("DB_HOST") and os.getenv("DB_NAME")
 )
-
-if USE_POSTGRES:
+# Database configuration - use PostgreSQL on Vercel
+if os.environ.get('VERCEL'):
+    # Production on Vercel - use Postgres
     DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": os.getenv("DB_NAME", "Rush"),
-            "USER": os.getenv("DB_USER", "postgres"),
-            "PASSWORD": os.getenv("DB_PASSWORD", ""),
-            "HOST": os.getenv("DB_HOST", "localhost"),
-            "PORT": os.getenv("DB_PORT", "5432"),
-        }
+        'default': dj_database_url.config(
+            default=os.environ.get('POSTGRES_URL'),
+            conn_max_age=600,
+            ssl_require=True
+        )
     }
 else:
+    # Local development - keep SQLite for simplicity
     DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
+
+# Add these for better performance on Vercel
+DATABASES['default']['OPTIONS'] = {
+    'sslmode': 'require',
+}
+# if USE_POSTGRES:
+#     DATABASES = {
+#         "default": {
+#             "ENGINE": "django.db.backends.postgresql",
+#             "NAME": os.getenv("DB_NAME", "Rush"),
+#             "USER": os.getenv("DB_USER", "postgres"),
+#             "PASSWORD": os.getenv("DB_PASSWORD", ""),
+#             "HOST": os.getenv("DB_HOST", "localhost"),
+#             "PORT": os.getenv("DB_PORT", "5432"),
+#         }
+#     }
+# else:
+#     DATABASES = {
+#         "default": {
+#             "ENGINE": "django.db.backends.sqlite3",
+#             "NAME": BASE_DIR / "db.sqlite3",
+#         }
+#     }
 
 
 # Password validation
